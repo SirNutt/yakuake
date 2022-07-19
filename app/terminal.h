@@ -98,6 +98,7 @@ Q_SIGNALS:
     void activityDetected(Terminal *terminal);
     void silenceDetected(Terminal *terminal);
     void destroyed(int terminalId);
+    void closeRequested(int terminalId);
 
 private Q_SLOTS:
     void setTitle(const QString &title);
@@ -126,6 +127,8 @@ private:
     bool m_monitorActivityEnabled;
     bool m_monitorSilenceEnabled;
     bool m_wantsBlur = false;
+
+    bool m_destroying = false;
 };
 
 #endif
