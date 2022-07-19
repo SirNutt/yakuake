@@ -464,15 +464,9 @@ void Session::editProfile()
 
 bool Session::keyboardInputEnabled()
 {
-    int keyboardInputEnabledCount = 0;
-
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (i.next().value()->keyboardInputEnabled())
-            ++keyboardInputEnabledCount;
-
-    return m_terminals.count() == keyboardInputEnabledCount;
+    return std::all_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return terminal->keyboardInputEnabled();
+    });
 }
 
 void Session::setKeyboardInputEnabled(bool enabled)
@@ -501,37 +495,23 @@ void Session::setKeyboardInputEnabled(int terminalId, bool enabled)
 
 bool Session::hasTerminalsWithKeyboardInputEnabled()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (i.next().value()->keyboardInputEnabled())
-            return true;
-
-    return false;
+    return std::any_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return terminal->keyboardInputEnabled();
+    });
 }
 
 bool Session::hasTerminalsWithKeyboardInputDisabled()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (!i.next().value()->keyboardInputEnabled())
-            return true;
-
-    return false;
+    return std::any_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return !terminal->keyboardInputEnabled();
+    });
 }
 
 bool Session::monitorActivityEnabled()
 {
-    int monitorActivityEnabledCount = 0;
-
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (i.next().value()->monitorActivityEnabled())
-            ++monitorActivityEnabledCount;
-
-    return m_terminals.count() == monitorActivityEnabledCount;
+    return std::all_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return terminal->monitorActivityEnabled();
+    });
 }
 
 void Session::setMonitorActivityEnabled(bool enabled)
@@ -564,24 +544,16 @@ void Session::setMonitorActivityEnabled(int terminalId, bool enabled)
 
 bool Session::hasTerminalsWithMonitorActivityEnabled()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (i.next().value()->monitorActivityEnabled())
-            return true;
-
-    return false;
+    return std::any_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return terminal->monitorActivityEnabled();
+    });
 }
 
 bool Session::hasTerminalsWithMonitorActivityDisabled()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (!i.next().value()->monitorActivityEnabled())
-            return true;
-
-    return false;
+    return std::any_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return !terminal->monitorActivityEnabled();
+    });
 }
 
 void Session::reconnectMonitorActivitySignals()
@@ -598,15 +570,9 @@ void Session::reconnectMonitorActivitySignals()
 
 bool Session::monitorSilenceEnabled()
 {
-    int monitorSilenceEnabledCount = 0;
-
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (i.next().value()->monitorSilenceEnabled())
-            ++monitorSilenceEnabledCount;
-
-    return m_terminals.count() == monitorSilenceEnabledCount;
+    return std::all_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return terminal->monitorSilenceEnabled();
+    });
 }
 
 void Session::setMonitorSilenceEnabled(bool enabled)
@@ -635,24 +601,16 @@ void Session::setMonitorSilenceEnabled(int terminalId, bool enabled)
 
 bool Session::hasTerminalsWithMonitorSilenceDisabled()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (!i.next().value()->monitorSilenceEnabled())
-            return true;
-
-    return false;
+    return std::any_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return !terminal->monitorSilenceEnabled();
+    });
 }
 
 bool Session::hasTerminalsWithMonitorSilenceEnabled()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        if (i.next().value()->monitorSilenceEnabled())
-            return true;
-
-    return false;
+    return std::any_of(m_terminals.cbegin(), m_terminals.cend(), [](Terminal *terminal) {
+        return terminal->monitorSilenceEnabled();
+    });
 }
 
 bool Session::wantsBlur() const
