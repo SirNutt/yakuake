@@ -471,10 +471,9 @@ bool Session::keyboardInputEnabled()
 
 void Session::setKeyboardInputEnabled(bool enabled)
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        setKeyboardInputEnabled(i.next().key(), enabled);
+    for (Terminal *terminal : std::as_const(m_terminals)) {
+        terminal->setKeyboardInputEnabled(enabled);
+    }
 }
 
 bool Session::keyboardInputEnabled(int terminalId)
@@ -516,10 +515,10 @@ bool Session::monitorActivityEnabled()
 
 void Session::setMonitorActivityEnabled(bool enabled)
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        setMonitorActivityEnabled(i.next().key(), enabled);
+    const auto keys = m_terminals.keys();
+    for (int terminalId : keys) {
+        setMonitorActivityEnabled(terminalId, enabled);
+    }
 }
 
 bool Session::monitorActivityEnabled(int terminalId)
@@ -558,12 +557,9 @@ bool Session::hasTerminalsWithMonitorActivityDisabled()
 
 void Session::reconnectMonitorActivitySignals()
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext()) {
-        i.next();
+    for (Terminal *terminal : std::as_const(m_terminals)) {
         // clang-format off
-        connect(i.value(), SIGNAL(activityDetected(Terminal*)), this, SIGNAL(activityDetected(Terminal*)), Qt::UniqueConnection);
+        connect(terminal, SIGNAL(activityDetected(Terminal*)), this, SIGNAL(activityDetected(Terminal*)), Qt::UniqueConnection);
         // clang-format on
     }
 }
@@ -577,10 +573,9 @@ bool Session::monitorSilenceEnabled()
 
 void Session::setMonitorSilenceEnabled(bool enabled)
 {
-    QMapIterator<int, Terminal *> i(m_terminals);
-
-    while (i.hasNext())
-        setMonitorSilenceEnabled(i.next().key(), enabled);
+    for (Terminal *terminal : std::as_const(m_terminals)) {
+        terminal->setMonitorSilenceEnabled(enabled);
+    }
 }
 
 bool Session::monitorSilenceEnabled(int terminalId)
